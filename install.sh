@@ -57,4 +57,12 @@ else
 fi
 
 ## Creating DB and User access
-wget 
+wget https://raw.githubusercontent.com/linuxautomations/sonarqube/master/sonarqube.sql -O /tmp/sonarqube.sql 
+mysql </tmp/sonarqube.sql
+if [ $? -eq 0 ]; then 
+	success "Successfully Created DB and User access"
+else
+	error "Failed to create DB and User access"
+	exit 1
+fi
+
