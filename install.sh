@@ -26,3 +26,33 @@ else
 	exit 1
 fi
 
+## Downloading MYSQL Repositories and MySQL Server
+MYSQLRPM=$(curl -s http://repo.mysql.com/ | html2text | grep el7 | tail -1 | sed -e 's/(/ /g' -e 's/)/ /g' | xargs -n1 | grep ^mysql)
+MYSQLURL="http://repo.mysql.com/$MYSQLRPM"
+
+yum install $MYSQLURL -y &>/dev/null
+if [ $? -eq 0 ]; then 
+	success "Successfully Configured MySQL Repositories"
+else
+	error "Error in Configuring MySQL Repositories"
+	exit 1
+fi
+
+## Installing MySQL Server
+yum install mysql-server -y &>/dev/null
+if [ $? -eq 0 ]; then 
+	success "Successfully Installed MySQL Server"
+else
+	error "Error in Installing MySQL Server"
+	exit 1
+fi
+
+systemctl enable mysqld &>/dev/null
+systemctl start mysqld 
+if [ $? -eq 0 ]; then 
+	success "Successfully Installed MySQL Server"
+else
+	error "Error in Installing MySQL Server"
+	exit 1
+fi
+
