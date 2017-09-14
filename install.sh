@@ -56,3 +56,5 @@ else
 	exit 1
 fi
 
+## Creating DB and User access
+wget 
