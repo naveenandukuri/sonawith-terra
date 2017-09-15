@@ -53,19 +53,20 @@ else
 	exit 1
 fi
 
+## Set Root Password and reset it
 systemctl enable mysqld &>/dev/null
-#systemctl set-environment MYSQLD_OPTS="--skip-grant-tables"
-systemctl start mysqld 
-if [ $? -eq 0 ]; then 
-	success "Successfully Started MySQL Server"
-else
-	error "Error in Starting MySQL Server"
-	exit 1
-fi
-
-## Set Root Password
-echo -e "\e[4m Note:$N You will be asked to set the root password and please set a root password"
-mysql_secure_installation
+systemctl set-environment MYSQLD_OPTS="--skip-grant-tables"
+systemctl restart mysqld
+mysql -e "use mysql;update user set authentication_string=password(''), plugin='mysql_native_password' where user='root';"
+systemctl unset-environment MYSQLD_OPTS
+systemctl restart mysqld
+mysql --connect-expired-password -e "ALTER USER 'root'@'localhost' IDENTIFIED BY 'P@$$w0rD'"
+systemctl set-environment MYSQLD_OPTS="--skip-grant-tables"
+systemctl restart mysqld
+mysql -e "use mysql;update user set authentication_string=password(''), plugin='mysql_native_password' where user='root';"
+systemctl unset-environment MYSQLD_OPTS
+systemctl restart mysqld
+mysql -e 'uninstall plugin validate_password;'
 
 ## Creating DB and User access
 wget https://raw.githubusercontent.com/linuxautomations/sonarqube/master/sonarqube.sql -O /tmp/sonarqube.sql &>/dev/null
