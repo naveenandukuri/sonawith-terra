@@ -54,7 +54,7 @@ else
 fi
 
 systemctl enable mysqld &>/dev/null
-systemctl set-environment MYSQLD_OPTS="--skip-grant-tables"
+#systemctl set-environment MYSQLD_OPTS="--skip-grant-tables"
 systemctl start mysqld 
 if [ $? -eq 0 ]; then 
 	success "Successfully Started MySQL Server"
@@ -63,8 +63,12 @@ else
 	exit 1
 fi
 
+## Set Root Password
+echo -e "\e[4m Note:$N You will be asked to set the root password and please set a root password"
+mysql_secure_installation
+
 ## Creating DB and User access
-wget https://raw.githubusercontent.com/linuxautomations/sonarqube/master/sonarqube.sql -O /tmp/sonarqube.sql 
+wget https://raw.githubusercontent.com/linuxautomations/sonarqube/master/sonarqube.sql -O /tmp/sonarqube.sql &>/dev/null
 mysql </tmp/sonarqube.sql
 if [ $? -eq 0 ]; then 
 	success "Successfully Created DB and User access"
