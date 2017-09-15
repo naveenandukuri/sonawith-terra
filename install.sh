@@ -87,12 +87,12 @@ URL="https://sonarsource.bintray.com/Distribution/sonarqube/$VER"
 echo $VER
 TFILE="/opt/$VER"
 echo $TFILE
-TDIR=$(echo $TFILE|sed -e 's/.tar.gz//')
+TDIR=$(echo $TFILE|sed -e 's/.zip//')
 echo $TDIR
 rm -rf /opt/sonarqube
 wget $URL -O $TFILE &>/dev/null
 cd /opt
-tar xf $VER
+unzip $VER &>/dev/null
 mv $TDIR sonarqube 
 if [ $? -eq 0 ]; then
 	success "Successfully Downloaded adn Extracted SonarQube"
