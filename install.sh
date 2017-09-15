@@ -66,12 +66,13 @@ systemctl restart mysqld
 mysql -e "use mysql;update user set authentication_string=password(''), plugin='mysql_native_password' where user='root';"
 systemctl unset-environment MYSQLD_OPTS
 systemctl restart mysqld
+mysql -e "grant all privileges on sonarqube.* to 'sonarqube'@'localhost' identified by 'password';"
 mysql -e 'uninstall plugin validate_password;'
 
 ## Creating DB and User access
 wget https://raw.githubusercontent.com/linuxautomations/sonarqube/master/sonarqube.sql -O /tmp/sonarqube.sql &>/dev/null
 mysql </tmp/sonarqube.sql
-if [ $? -eq 0 ]; then 
+if [ $? -eq 0 ]; then
 	success "Successfully Created DB and User access"
 else
 	error "Failed to create DB and User access"
