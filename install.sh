@@ -68,7 +68,7 @@ mysql -e "use mysql;update user set authentication_string=password(''), plugin='
 systemctl unset-environment MYSQLD_OPTS
 systemctl restart mysqld
 mysql -e "grant all privileges on sonarqube.* to 'sonarqube'@'localhost' identified by 'password';" &>/dev/null
-mysql -e 'uninstall plugin validate_password;'
+mysql -e 'uninstall plugin validate_password;' &>/dev/null
 
 ## Creating DB and User access
 wget https://raw.githubusercontent.com/linuxautomations/sonarqube/master/sonarqube.sql -O /tmp/sonarqube.sql &>/dev/null
@@ -104,7 +104,10 @@ fi
 ## Configure SonarQube
 sed -i -e '/^sonar.jdbc.username/ d' -e '/^sonar.jdbc.password/ d' -e '/^sonar.jdbc.url/ d' -e '/^sonar.web.host/ d' -e '/^sonar.web.port/ d' /opt/sonarqube/conf/sonar.properties
 sed -i -e '/#sonar.jdbc.username/ a sonar.jdbc.username=sonarqube' -e '/#sonar.jdbc.password/ a sonar.jdbc.password=password' -e '/#sonar.jdbc.url/ a sonar.jdbc.url=jdbc:mysql://localhost:3306/sonarqube?useUnicode=true&amp;characterEncoding=utf8&amp;rewriteBatchedStatements=true&amp;useConfigs=maxPerformance' -e '/#sonar.web.host/ a sonar.web.host=0.0.0.0' -e '/#sonar.web.port/ a sonar.web.port=80' /opt/sonarqube/conf/sonar.properties
-/opt/sonarqube/bin/linux-x86-64/sonar.sh start &>/dev/null
+
+ln -s /opt/sonarqube/bin/linux-x86-64/sonar.sh /etc/init.d/sonar
+systemctl enable sonar
+systemctl start sonar
 if [ $? -eq 0 ]; then
 	success "Configured and Started SonarQube Successfully"
 else
