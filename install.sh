@@ -30,12 +30,17 @@ fi
 MYSQLRPM=$(curl -s http://repo.mysql.com/ | html2text | grep el7 | tail -1 | sed -e 's/(/ /g' -e 's/)/ /g' | xargs -n1 | grep ^mysql)
 MYSQLURL="http://repo.mysql.com/$MYSQLRPM"
 
-yum install $MYSQLURL -y &>/dev/null
-if [ $? -eq 0 ]; then 
-	success "Successfully Configured MySQL Repositories"
+if [ ! -f /etc/init.d/mysql-community.repo ]; then 
+
+	yum install $MYSQLURL -y &>/dev/null
+	if [ $? -eq 0 ]; then 
+		success "Successfully Configured MySQL Repositories"
+	else
+		error "Error in Configuring MySQL Repositories"
+		exit 1
+	fi
 else
-	error "Error in Configuring MySQL Repositories"
-	exit 1
+	warning "MySQL Repositories are already Configured"
 fi
 
 ## Installing MySQL Server
