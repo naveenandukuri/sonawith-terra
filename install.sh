@@ -48,11 +48,12 @@ else
 fi
 
 systemctl enable mysqld &>/dev/null
+systemctl set-environment MYSQLD_OPTS="--skip-grant-tables"
 systemctl start mysqld 
 if [ $? -eq 0 ]; then 
-	success "Successfully Installed MySQL Server"
+	success "Successfully Started MySQL Server"
 else
-	error "Error in Installing MySQL Server"
+	error "Error in Starting MySQL Server"
 	exit 1
 fi
 
