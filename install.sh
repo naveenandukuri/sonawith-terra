@@ -54,6 +54,7 @@ else
 fi
 
 ## Set Root Password and reset it
+sed -i -e '/query_cache_size/ d' -e '$ a query_cache_size = 15M' /etc/my.cnf 
 systemctl enable mysqld &>/dev/null
 systemctl set-environment MYSQLD_OPTS="--skip-grant-tables"
 systemctl restart mysqld
@@ -66,7 +67,7 @@ systemctl restart mysqld
 mysql -e "use mysql;update user set authentication_string=password(''), plugin='mysql_native_password' where user='root';"
 systemctl unset-environment MYSQLD_OPTS
 systemctl restart mysqld
-mysql -e "grant all privileges on sonarqube.* to 'sonarqube'@'localhost' identified by 'password';"
+mysql -e "grant all privileges on sonarqube.* to 'sonarqube'@'localhost' identified by 'password';" &>/dev/null
 mysql -e 'uninstall plugin validate_password;'
 
 ## Creating DB and User access
@@ -78,4 +79,26 @@ else
 	error "Failed to create DB and User access"
 	exit 1
 fi
+
+
+## Downloading SonarQube 
+VER=$(curl https://sonarsource.bintray.com/Distribution/sonarqube/  | tail -n 10 | awk -F '[<,>]' '{print $5}' | grep zip$ |tail -1)
+URL="https://sonarsource.bintray.com/Distribution/sonarqube/$VER"
+TFILE="/opt/$VER"
+TDIR=$(echo $TFILE|sed -e 's/.tar.gz//')
+rm -rf /opt/sonarqube
+wget $URL -O $TFILE &>/dev/null
+cd /opt
+tar xf $VER
+mv $TDIR sonarqube 
+if [ $? -eq 0 ]; then
+	success "Successfully Downloaded adn Extracted SonarQube"
+else
+	error "Error in Downlading and Extracting SonarQube"
+	exit 1
+fi
+
+## Configure SonarQube
+
+
 
