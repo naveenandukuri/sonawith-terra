@@ -15,10 +15,10 @@ CheckSELinux
 CheckFirewall
 
 ## Downloading Java
-DownloadJava 8
+#DownloadJava 8
 
 ## Installing Java
-yum localinstall $JAVAFILE -y &>/dev/null
+yum install java -y &>/dev/null
 if [ $? -eq 0 ]; then 
 	success "JAVA Installed Successfully"
 else
