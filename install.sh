@@ -18,6 +18,7 @@ CheckFirewall
 DownloadJava 8
 
 ## Installing Java
+yum install /opt/jdk* -y
 if [ $? -eq 0 ]; then 
 	success "JAVA Installed Successfully"
 else
