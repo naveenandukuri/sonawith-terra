@@ -105,7 +105,7 @@ sed -i -e '/#sonar.jdbc.username/ a sonar.jdbc.username=sonarqube' -e '/#sonar.j
 useradd sonar
 chown sonar:sonar /opt/sonarqube -R
 sed -i -e '/^#RUN_AS_USER/ c RUN_AS_USER=sonar' /opt/sonarqube/bin/linux-x86-64/sonar.sh
-ls -s /opt/sonarqube/bin/linux-x86-64/sonar.sh /etc/init.d/sonar
+ln -s /opt/sonarqube/bin/linux-x86-64/sonar.sh /etc/init.d/sonar
 systemctl enable sonar &>/dev/null 
 systemctl start sonar &>/dev/null
 if [ $? -eq 0 ]; then
