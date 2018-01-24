@@ -14,10 +14,23 @@ CheckSELinux
 ## Checking Firewall on the Server.
 CheckFirewall
 
-## Downloading Java
-DownloadJava 8
+which java &>/dev/null
+if [ $? -ne 0 ]; then 
+	## Downloading Java
+	DownloadJava 8
+	## Installing Java
+	yum install /opt/jdk* -y &>/dev/null
+	if [ $? -eq 0 ]; then 
+		success "JAVA Installed Successfully"
+	else
+		error "JAVA Installation Failure!"
+		exit 1
+	fi
+else
+	success "Java already Installed"
+fi
 
-## Installing Java
+
 ## Downloading MYSQL Repositories and MySQL Server
 yum install https://kojipkgs.fedoraproject.org/packages/python-html2text/2016.9.19/1.el7/noarch/python2-html2text-2016.9.19-1.el7.noarch.rpm -y &>/dev/null
 MYSQLRPM=$(curl -s http://repo.mysql.com/ | html2text | grep el7 | tail -1 | sed -e 's/(/ /g' -e 's/)/ /g' | xargs -n1 | grep ^mysql)
