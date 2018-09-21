@@ -34,7 +34,7 @@ fi
 
 ## Downloading MYSQL Repositories and MySQL Server
 yum install https://kojipkgs.fedoraproject.org/packages/python-html2text/2016.9.19/1.el7/noarch/python2-html2text-2016.9.19-1.el7.noarch.rpm -y &>/dev/null
-MYSQLRPM=$(curl -s http://repo.mysql.com/ | html2text | grep el7 | tail -1 | sed -e 's/(/ /g' -e 's/)/ /g' | xargs -n1 | grep ^mysql)
+MYSQLRPM=$(curl -s http://repo.mysql.com/ | html2text | grep el7 | grep mysql57| tail -1 | sed -e 's/(/ /g' -e 's/)/ /g' | xargs -n1 | grep ^mysql)
 MYSQLURL="http://repo.mysql.com/$MYSQLRPM"
 
 if [ ! -f /etc/yum.repos.d/mysql-community.repo ]; then 
