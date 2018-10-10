@@ -1,6 +1,5 @@
 #!/bin/bash
 
-<<EOF
 ## Source Common Functions
 curl -s "https://raw.githubusercontent.com/linuxautomations/scripts/master/common-functions.sh" >/tmp/common-functions.sh
 #source /root/scripts/common-functions.sh
@@ -86,7 +85,6 @@ else
 	error "Failed to create DB and User access"
 	exit 1
 fi
-EOF
 
 ## Downloading SonarQube 
 #VER=$(curl -s https://sonarsource.bintray.com/Distribution/sonarqube/  | tail -n 10 | awk -F '[<,>]' '{print $5}' | grep zip$ |tail -1)
