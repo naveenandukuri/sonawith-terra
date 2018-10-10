@@ -97,7 +97,7 @@ TDIR=$(echo $TFILE|sed -e 's/.zip//')
 rm -rf /opt/sonarqube
 wget $URL -O $TFILE &>/dev/null
 cd /opt
-unzip $VER &>/dev/null
+unzip $TFILE &>/dev/null
 mv $TDIR sonarqube 
 if [ $? -eq 0 ]; then
 	success "Successfully Downloaded and Extracted SonarQube"
