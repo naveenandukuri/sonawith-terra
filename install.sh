@@ -1,5 +1,5 @@
 #!/bin/bash
-
+<<EOF
 ## Source Common Functions
 curl -s "https://raw.githubusercontent.com/linuxautomations/scripts/master/common-functions.sh" >/tmp/common-functions.sh
 #source /root/scripts/common-functions.sh
@@ -86,9 +86,11 @@ else
 	exit 1
 fi
 
+EOF
 
 ## Downloading SonarQube 
 VER=$(curl -s https://sonarsource.bintray.com/Distribution/sonarqube/  | tail -n 10 | awk -F '[<,>]' '{print $5}' | grep zip$ |tail -1)
+exit 
 URL="https://sonarsource.bintray.com/Distribution/sonarqube/$VER"
 TFILE="/opt/$VER"
 TDIR=$(echo $TFILE|sed -e 's/.zip//')
