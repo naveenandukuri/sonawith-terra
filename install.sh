@@ -59,6 +59,11 @@ else
 	exit 1
 fi
 
+echo 'vm.max_map_count=262144' >/etc/sysctl.conf 
+sysctl -p &>/dev/null
+
+echo '* - nofile 80000' >>/etc/security/limits.conf
+
 ## Set Root Password and reset it
 sed -i -e '/query_cache_size/ d' -e '$ a query_cache_size = 15M' /etc/my.cnf 
 systemctl enable mysqld &>/dev/null
