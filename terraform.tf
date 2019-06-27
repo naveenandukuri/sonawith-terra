@@ -9,6 +9,7 @@ resource "aws_instance" "sonar" {
             type     = "ssh"
             user     = "centos"
             private_key = "${file("/home/centos/.ssh/id_rsa")}"
+            vpc_security_group_ids = ["sg-ff6b6ab6"]
           }
         inline = [
         "curl -s https://raw.githubusercontent.com/linuxautomations/sonarqube/master/install.sh | sudo bash",
